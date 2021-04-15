@@ -177,6 +177,7 @@ type
     procedure PropertyName; override;
     procedure PropertyParameterList; override;
     procedure RaiseStatement; override;
+    procedure RecordConstant; override;
     procedure RecordConstraint; override;
     procedure RecordFieldConstant; override;
     procedure RecordType; override;
@@ -976,6 +977,16 @@ end;
 procedure TPasSyntaxTreeBuilder.ConstructorConstraint;
 begin
   FStack.Push(ntConstructorConstraint);
+  try
+    inherited;
+  finally
+    FStack.Pop;
+  end;
+end;
+
+procedure TPasSyntaxTreeBuilder.RecordConstant;
+begin
+  FStack.Push(ntRecordConstant);
   try
     inherited;
   finally
