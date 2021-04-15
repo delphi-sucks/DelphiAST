@@ -160,6 +160,7 @@ type
     procedure InterfaceSection; override;
     procedure InterfaceType; override;
     procedure LabelId; override;
+    procedure LibraryFile; override;
     procedure MainUsesClause; override;
     procedure MainUsedUnitStatement; override;
     procedure MethodKind; override;
@@ -169,6 +170,7 @@ type
     procedure Number; override;
     procedure ObjectNameOfMethod; override;
     procedure OutParameter; override;
+    procedure PackageFile; override;
     procedure ParameterFormal; override;
     procedure ParameterName; override;
     procedure PointerSymbol; override;
@@ -177,6 +179,7 @@ type
     procedure ProcedureHeading; override;
     procedure ProcedureDeclarationSection; override;
     procedure ProcedureProcedureName; override;
+    procedure ProgramFile; override;
     procedure PropertyName; override;
     procedure PropertyParameterList; override;
     procedure RaiseStatement; override;
@@ -291,7 +294,8 @@ uses
 type
   TAttributeValue = (atAsm, atTrue, atFunction, atProcedure, atClassOf, atClass,
     atConst, atConstructor, atDestructor, atEnum, atInterface, atNil, atNumeric,
-    atOut, atPointer, atName, atString, atSubRange, atVar, atDispInterface);
+    atOut, atPointer, atName, atString, atSubRange, atVar, atDispInterface,
+    atLibrary, atPackage, atProgram, atUnit);
 
 var
   AttributeValues: array[TAttributeValue] of string;
@@ -1665,6 +1669,12 @@ begin
   inherited;
 end;
 
+procedure TPasSyntaxTreeBuilder.LibraryFile;
+begin
+  FStack.Peek.SetAttribute(anType, AttributeValues[atLibrary]);
+  inherited;
+end;
+
 procedure TPasSyntaxTreeBuilder.MainUsedUnitStatement;
 var
   NameNode, PathNode, PathLiteralNode, Temp: TSyntaxNode;
@@ -1817,6 +1827,12 @@ begin
   end;
 end;
 
+procedure TPasSyntaxTreeBuilder.PackageFile;
+begin
+  FStack.Peek.SetAttribute(anType, AttributeValues[atPackage]);
+  inherited;
+end;
+
 procedure TPasSyntaxTreeBuilder.ParameterFormal;
 begin
   FStack.Push(ntParameters);
@@ -1889,6 +1905,12 @@ end;
 procedure TPasSyntaxTreeBuilder.ProcedureProcedureName;
 begin
   FStack.Peek.SetAttribute(anName, Lexer.Token);
+  inherited;
+end;
+
+procedure TPasSyntaxTreeBuilder.ProgramFile;
+begin
+  FStack.Peek.SetAttribute(anType, AttributeValues[atProgram]);
   inherited;
 end;
 
@@ -2491,6 +2513,8 @@ procedure TPasSyntaxTreeBuilder.UnitFile;
 var
   Temp: TSyntaxNode;
 begin
+  FStack.Peek.SetAttribute(anType, AttributeValues[atUnit]);
+
   Temp := FStack.Peek;
   AssignLexerPositionToNode(Lexer, Temp);
   inherited;
