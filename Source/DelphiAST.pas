@@ -460,7 +460,7 @@ end;
 
 procedure TPasSyntaxTreeBuilder.ArrayConstant;
 begin
-  FStack.Push(ntExpressions);
+  FStack.Push(ntArrayConstant);
   try
     inherited;
   finally
