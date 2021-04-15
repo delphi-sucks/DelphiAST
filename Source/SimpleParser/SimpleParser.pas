@@ -242,6 +242,8 @@ type
     procedure AncestorId; virtual;
     procedure AnonymousMethod; virtual;
     procedure AnonymousMethodType; virtual;
+    procedure AnonymousProcedureType; virtual;
+    procedure AnonymousFunctionType; virtual;
     procedure ArrayConstant; virtual;
     procedure ArrayBounds; virtual;
     procedure ArrayDimension; virtual;
@@ -5491,6 +5493,15 @@ begin
     end;
 end;
 
+procedure TmwSimplePasPar.AnonymousFunctionType;
+begin
+  Expected(ptFunction);
+  if TokenID = ptRoundOpen then
+    FormalParameterList;
+  Expected(ptColon);
+  ReturnType;
+end;
+
 procedure TmwSimplePasPar.AnonymousMethod;
 begin
   case TokenID of
@@ -5519,19 +5530,20 @@ begin
   case TokenID of
     ptProcedure:
       begin
-        NextToken;
-        if TokenID = ptRoundOpen then
-          FormalParameterList;
+        AnonymousProcedureType;
       end;
     ptFunction:
       begin
-        NextToken;
-        if TokenID = ptRoundOpen then
-          FormalParameterList;
-        Expected(ptColon);
-        ReturnType;
+        AnonymousFunctionType;
       end;
   end;
+end;
+
+procedure TmwSimplePasPar.AnonymousProcedureType;
+begin
+  Expected(ptProcedure);
+  if TokenID = ptRoundOpen then
+    FormalParameterList;
 end;
 
 procedure TmwSimplePasPar.AddDefine(const ADefine: string);

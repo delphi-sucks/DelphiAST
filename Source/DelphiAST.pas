@@ -69,6 +69,9 @@ type
     procedure AddressOp; override;
     procedure AlignmentParameter; override;
     procedure AnonymousMethod; override;
+    procedure AnonymousMethodType; override;
+    procedure AnonymousProcedureType; override;
+    procedure AnonymousFunctionType; override;
     procedure ArrayBounds; override;
     procedure ArrayConstant; override;
     procedure ArrayDimension; override;
@@ -438,6 +441,12 @@ begin
   end;
 end;
 
+procedure TPasSyntaxTreeBuilder.AnonymousFunctionType;
+begin
+  FStack.Peek.SetAttribute(anKind, AttributeValues[atFunction]);
+  inherited;
+end;
+
 procedure TPasSyntaxTreeBuilder.AnonymousMethod;
 begin
   FStack.Push(ntAnonymousMethod);
@@ -446,6 +455,23 @@ begin
   finally
     FStack.Pop;
   end;
+end;
+
+procedure TPasSyntaxTreeBuilder.AnonymousMethodType;
+begin
+  FStack.Push(ntType);
+  try
+    FStack.Peek.SetAttribute(anAnonymous, AttributeValues[atTrue]);
+    inherited;
+  finally
+    FStack.Pop;
+  end;
+end;
+
+procedure TPasSyntaxTreeBuilder.AnonymousProcedureType;
+begin
+  FStack.Peek.SetAttribute(anKind, AttributeValues[atProcedure]);
+  inherited;
 end;
 
 procedure TPasSyntaxTreeBuilder.ArrayBounds;

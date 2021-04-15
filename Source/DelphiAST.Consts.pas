@@ -155,7 +155,8 @@ type
     anReintroduce,
     anOverload,
     anAbstract,
-    anInline
+    anInline,
+    anAnonymous
   );
 
 const
@@ -311,7 +312,8 @@ const
     'reintroduce',
     'overload',
     'abstract',
-    'inline'
+    'inline',
+    'anonymous'
   );
 
 implementation
